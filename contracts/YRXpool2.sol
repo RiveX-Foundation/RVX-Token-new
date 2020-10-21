@@ -1,25 +1,35 @@
-/**
- *Submitted for verification at Etherscan.io on 2020-10-19
-*/
-
-pragma solidity ^0.5.17;
-/**
-*/
-
 /*
-   ____            __   __        __   _
-  / __/__ __ ___  / /_ / /  ___  / /_ (_)__ __
- _\ \ / // // _ \/ __// _ \/ -_)/ __// / \ \ /
-/___/ \_, //_//_/\__//_//_/\__/ \__//_/ /_\_\
-     /___/
 
-* Synthetix: YFIRewards.sol
 *
 * Docs: https://docs.synthetix.io/
 *
+*
+* MIT License
+* ===========
+*
+* Copyright (c) 2020 Synthetix
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
+// File: @openzeppelin/contracts/math/Math.sol
 
+pragma solidity ^0.5.0;
 
 /**
  * @dev Standard math utilities missing in the Solidity language.
@@ -45,9 +55,13 @@ library Math {
      */
     function average(uint256 a, uint256 b) internal pure returns (uint256) {
         // (a + b) / 2 can overflow, so we distribute
-        return (a / 2) + (b / 2) + ((a % 2 + b % 2) / 2);
+        return (a / 2) + (b / 2) + (((a % 2) + (b % 2)) / 2);
     }
 }
+
+// File: @openzeppelin/contracts/math/SafeMath.sol
+
+pragma solidity ^0.5.0;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -103,7 +117,11 @@ library SafeMath {
      *
      * _Available since v2.4.0._
      */
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function sub(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b <= a, errorMessage);
         uint256 c = a - b;
 
@@ -161,7 +179,11 @@ library SafeMath {
      *
      * _Available since v2.4.0._
      */
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function div(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         // Solidity only automatically asserts when dividing by 0
         require(b > 0, errorMessage);
         uint256 c = a / b;
@@ -198,11 +220,19 @@ library SafeMath {
      *
      * _Available since v2.4.0._
      */
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function mod(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b != 0, errorMessage);
         return a % b;
     }
 }
+
+// File: @openzeppelin/contracts/GSN/Context.sol
+
+pragma solidity ^0.5.0;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -217,7 +247,8 @@ library SafeMath {
 contract Context {
     // Empty internal constructor, to prevent people from mistakenly deploying
     // an instance of this contract, which should be used via inheritance.
-    constructor () internal { }
+    constructor() internal {}
+
     // solhint-disable-previous-line no-empty-blocks
 
     function _msgSender() internal view returns (address payable) {
@@ -229,6 +260,10 @@ contract Context {
         return msg.data;
     }
 }
+
+// File: @openzeppelin/contracts/ownership/Ownable.sol
+
+pragma solidity ^0.5.0;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -242,12 +277,15 @@ contract Context {
 contract Ownable is Context {
     address private _owner;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor () internal {
+    constructor() internal {
         _owner = _msgSender();
         emit OwnershipTransferred(address(0), _owner);
     }
@@ -298,11 +336,18 @@ contract Ownable is Context {
      * @dev Transfers ownership of the contract to a new account (`newOwner`).
      */
     function _transferOwnership(address newOwner) internal {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        require(
+            newOwner != address(0),
+            "Ownable: new owner is the zero address"
+        );
         emit OwnershipTransferred(_owner, newOwner);
         _owner = newOwner;
     }
 }
+
+// File: @openzeppelin/contracts/token/ERC20/IERC20.sol
+
+pragma solidity ^0.5.0;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
@@ -326,8 +371,11 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transfer(address recipient, uint256 amount) external returns (bool);
-    function mint(address account, uint amount) external;
+    function transfer(address recipient, uint256 amount)
+        external
+        returns (bool);
+
+    function mint(address account, uint256 amount) external;
 
     /**
      * @dev Returns the remaining number of tokens that `spender` will be
@@ -336,7 +384,10 @@ interface IERC20 {
      *
      * This value changes when {approve} or {transferFrom} are called.
      */
-    function allowance(address owner, address spender) external view returns (uint256);
+    function allowance(address owner, address spender)
+        external
+        view
+        returns (uint256);
 
     /**
      * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
@@ -363,7 +414,11 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -377,7 +432,11 @@ interface IERC20 {
      * @dev Emitted when the allowance of a `spender` for an `owner` is set by
      * a call to {approve}. `value` is the new allowance.
      */
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
 }
 
 // File: @openzeppelin/contracts/utils/Address.sol
@@ -408,9 +467,13 @@ library Address {
         // and 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470 is returned
         // for accounts without code, i.e. `keccak256('')`
         bytes32 codehash;
-        bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
+
+            bytes32 accountHash
+         = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
         // solhint-disable-next-line no-inline-assembly
-        assembly { codehash := extcodehash(account) }
+        assembly {
+            codehash := extcodehash(account)
+        }
         return (codehash != 0x0 && codehash != accountHash);
     }
 
@@ -420,7 +483,11 @@ library Address {
      *
      * _Available since v2.4.0._
      */
-    function toPayable(address account) internal pure returns (address payable) {
+    function toPayable(address account)
+        internal
+        pure
+        returns (address payable)
+    {
         return address(uint160(account));
     }
 
@@ -443,13 +510,23 @@ library Address {
      * _Available since v2.4.0._
      */
     function sendValue(address payable recipient, uint256 amount) internal {
-        require(address(this).balance >= amount, "Address: insufficient balance");
+        require(
+            address(this).balance >= amount,
+            "Address: insufficient balance"
+        );
 
         // solhint-disable-next-line avoid-call-value
         (bool success, ) = recipient.call.value(amount)("");
-        require(success, "Address: unable to send value, recipient may have reverted");
+        require(
+            success,
+            "Address: unable to send value, recipient may have reverted"
+        );
     }
 }
+
+// File: @openzeppelin/contracts/token/ERC20/SafeERC20.sol
+
+pragma solidity ^0.5.0;
 
 /**
  * @title SafeERC20
@@ -464,33 +541,83 @@ library SafeERC20 {
     using SafeMath for uint256;
     using Address for address;
 
-    function safeTransfer(IERC20 token, address to, uint256 value) internal {
-        callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
+    function safeTransfer(
+        IERC20 token,
+        address to,
+        uint256 value
+    ) internal {
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(token.transfer.selector, to, value)
+        );
     }
 
-    function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal {
-        callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
+    function safeTransferFrom(
+        IERC20 token,
+        address from,
+        address to,
+        uint256 value
+    ) internal {
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(token.transferFrom.selector, from, to, value)
+        );
     }
 
-    function safeApprove(IERC20 token, address spender, uint256 value) internal {
+    function safeApprove(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
         // safeApprove should only be called when setting an initial allowance,
         // or when resetting it to zero. To increase and decrease it, use
         // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'
         // solhint-disable-next-line max-line-length
-        require((value == 0) || (token.allowance(address(this), spender) == 0),
+        require(
+            (value == 0) || (token.allowance(address(this), spender) == 0),
             "SafeERC20: approve from non-zero to non-zero allowance"
         );
-        callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(token.approve.selector, spender, value)
+        );
     }
 
-    function safeIncreaseAllowance(IERC20 token, address spender, uint256 value) internal {
-        uint256 newAllowance = token.allowance(address(this), spender).add(value);
-        callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
+    function safeIncreaseAllowance(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
+        uint256 newAllowance = token.allowance(address(this), spender).add(
+            value
+        );
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(
+                token.approve.selector,
+                spender,
+                newAllowance
+            )
+        );
     }
 
-    function safeDecreaseAllowance(IERC20 token, address spender, uint256 value) internal {
-        uint256 newAllowance = token.allowance(address(this), spender).sub(value, "SafeERC20: decreased allowance below zero");
-        callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
+    function safeDecreaseAllowance(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
+        uint256 newAllowance = token.allowance(address(this), spender).sub(
+            value,
+            "SafeERC20: decreased allowance below zero"
+        );
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(
+                token.approve.selector,
+                spender,
+                newAllowance
+            )
+        );
     }
 
     /**
@@ -514,20 +641,31 @@ library SafeERC20 {
         (bool success, bytes memory returndata) = address(token).call(data);
         require(success, "SafeERC20: low-level call failed");
 
-        if (returndata.length > 0) { // Return data is optional
+        if (returndata.length > 0) {
+            // Return data is optional
             // solhint-disable-next-line max-line-length
-            require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
+            require(
+                abi.decode(returndata, (bool)),
+                "SafeERC20: ERC20 operation did not succeed"
+            );
         }
     }
 }
 
-contract IRewardDistributionRecipient is Ownable {
-    address rewardDistribution = 0x680b6e26C9b0107fda32D8395a977F3F00fa0c7F;
+// File: contracts/IRewardDistributionRecipient.sol
 
-    function notifyRewardAmount(uint256 reward) external;
+pragma solidity ^0.5.0;
+
+contract IRewardDistributionRecipient is Ownable {
+    address rewardDistribution = 0x3996ec035cb6987dC3B15D4836b74bAf85474F91; //change
+
+    function notifyRewardAmount() external;
 
     modifier onlyRewardDistribution() {
-        require(_msgSender() == rewardDistribution, "Caller is not reward distribution");
+        require(
+            _msgSender() == rewardDistribution,
+            "Caller is not reward distribution"
+        );
         _;
     }
 
@@ -539,15 +677,18 @@ contract IRewardDistributionRecipient is Ownable {
     }
 }
 
-contract LPTokenWrapper  {
+// File: contracts/CurveRewards.sol
+
+pragma solidity ^0.5.0;
+
+contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public rvx = IERC20(0x91d6f6e9026E43240ce6F06Af6a4b33129EBdE94); 
+    IERC20 public uni_lp = IERC20(0xBd455F35BC5e531999B1C8fC72DF938767aA69b9);
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
-    
 
     function totalSupply() public view returns (uint256) {
         return _totalSupply;
@@ -560,27 +701,26 @@ contract LPTokenWrapper  {
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        rvx.safeTransferFrom(msg.sender, address(this), amount);
+        uni_lp.safeTransferFrom(msg.sender, address(this), amount);
     }
 
-     function withdraw(uint256 amount) public {
+    function withdraw(uint256 amount) public {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        rvx.safeTransfer(msg.sender, amount);
+        uni_lp.safeTransfer(msg.sender, amount);
     }
-
 }
 
-contract Losv2 is LPTokenWrapper, IRewardDistributionRecipient {
-    IERC20 public rvx = IERC20(0x91d6f6e9026E43240ce6F06Af6a4b33129EBdE94);
-    uint8 public constant NUMBER_EPOCHS = 11;
-     uint256 public constant EPOCH_REWARD = 63636 ether;
-      uint256 public constant TOTAL_REWARD = EPOCH_REWARD * NUMBER_EPOCHS;
+contract YRXpooltwo is LPTokenWrapper, IRewardDistributionRecipient {
+    IERC20 public yrx = IERC20(0x21634B64a6915b879aD13d96418a82b2a48Fcbe9);
+    uint8 public constant NUMBER_EPOCHS = 5;
+    uint256 public constant EPOCH_REWARD = 666666666666666700000;
+    uint256 public constant TOTAL_REWARD = EPOCH_REWARD * NUMBER_EPOCHS;
     uint256 public constant DURATION = 7 days;
-     uint256 public currentEpochReward = EPOCH_REWARD;
-     uint256 public totalAccumulatedReward = 0;
-      uint8 public currentEpoch = 0;
-    uint256 public starttime = 1603116000; //Monday, October 19, 2020 4:00:00 PM GMT+02:00 , 10 PM SGT 
+    uint256 public currentEpochReward = EPOCH_REWARD;
+    uint256 public totalAccumulatedReward = 0;
+    uint8 public currentEpoch = 0;
+    uint256 public starttime = 1602842400; //Friday, October 16, 2020 12:00:00 PM GMT+02:00 || Friday, October 16, 6 PM SGT
     uint256 public periodFinish = 0;
     uint256 public rewardRate = 0;
     uint256 public lastUpdateTime;
@@ -594,7 +734,6 @@ contract Losv2 is LPTokenWrapper, IRewardDistributionRecipient {
     event RewardPaid(address indexed user, uint256 reward);
 
     modifier updateReward(address account) {
-       
         rewardPerTokenStored = rewardPerToken();
         lastUpdateTime = lastTimeRewardApplicable();
         if (account != address(0)) {
@@ -631,35 +770,47 @@ contract Losv2 is LPTokenWrapper, IRewardDistributionRecipient {
     }
 
     // stake visibility is public as overriding LPTokenWrapper's stake() function
-    function stake(uint256 amount) public updateReward(msg.sender) checkNextEpoch checkStart{
+    function stake(uint256 amount)
+        public
+        updateReward(msg.sender)
+        checkNextEpoch
+        checkStart
+    {
         require(amount > 0, "Cannot stake 0");
-        super.stake(amount); //stake RVX
+        super.stake(amount);
         emit Staked(msg.sender, amount);
     }
 
-    function withdraw(uint256 amount) public updateReward(msg.sender) checkNextEpoch checkStart {
+    function withdraw(uint256 amount)
+        public
+        updateReward(msg.sender)
+        checkStart
+    {
         require(amount > 0, "Cannot withdraw 0");
         super.withdraw(amount);
         emit Withdrawn(msg.sender, amount);
     }
 
     function exit() external {
-        withdraw(balanceOf(msg.sender)); 
+        withdraw(balanceOf(msg.sender));
         getReward();
     }
-    
 
-    function getReward() public updateReward(msg.sender) checkNextEpoch{
-       
+    function getReward()
+        public
+        updateReward(msg.sender)
+        checkNextEpoch
+        checkStart
+    {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            rvx.safeTransfer(msg.sender, reward);
+            yrx.safeTransfer(msg.sender, reward);
             emit RewardPaid(msg.sender, reward);
         }
     }
 
-  modifier checkNextEpoch() {
+    modifier checkNextEpoch() {
         if (block.timestamp >= periodFinish) {
             currentEpochReward = EPOCH_REWARD;
 
@@ -668,7 +819,9 @@ contract Losv2 is LPTokenWrapper, IRewardDistributionRecipient {
             }
 
             if (currentEpochReward > 0) {
-                totalAccumulatedReward = totalAccumulatedReward.add(currentEpochReward);
+                totalAccumulatedReward = totalAccumulatedReward.add(
+                    currentEpochReward
+                );
                 currentEpoch++;
             }
 
@@ -679,27 +832,26 @@ contract Losv2 is LPTokenWrapper, IRewardDistributionRecipient {
         }
         _;
     }
-    
-    function emergencyDrain(address _addy) public onlyRewardDistribution{
+
+    function emergencyDrain(address _addy) public onlyRewardDistribution {
         IERC20 token = IERC20(_addy);
-        token.safeTransfer(msg.sender,token.balanceOf(address(this)));
+        token.safeTransfer(msg.sender, token.balanceOf(address(this)));
     }
-    
-    modifier checkStart(){
-        require(block.timestamp > starttime,"not start");
+
+    modifier checkStart() {
+        require(block.timestamp > starttime, "not start");
         _;
     }
 
-    function notifyRewardAmount(uint256 reward)
+    function notifyRewardAmount()
         external
         onlyRewardDistribution
         updateReward(address(0))
     {
-        currentEpochReward = reward;
-         if (totalAccumulatedReward.add(currentEpochReward) > TOTAL_REWARD) {
+        if (totalAccumulatedReward.add(currentEpochReward) > TOTAL_REWARD) {
             currentEpochReward = TOTAL_REWARD.sub(totalAccumulatedReward); // limit total reward
         }
-        
+
         rewardRate = currentEpochReward.div(DURATION);
         totalAccumulatedReward = totalAccumulatedReward.add(currentEpochReward);
         currentEpoch++;
